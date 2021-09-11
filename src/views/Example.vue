@@ -1,11 +1,13 @@
 <template>
   <div>
     <div :title="'Jump to: ' + $router.getRoutes()[0].name"
-         :class="{example: Value < 5, clickable: Clickable}"
+         :class="{example: value < 5, clickable: clickable}"
          :style="{'font-size': '25px'}"
-         @click="$router.push({ name: 'Home' })">{{ Name }}</div>
+         @click="$router.push({ name: 'Home' })">{{ name }}</div>
 
-    <card :title="'Title'" :value="Value" :data="Data" @calc="handler"></card>
+    <card :title="'Title'" :value="value" :data="data" @calc="handler"></card>
+    <div>Result: {{ result }}</div>
+    <div>Amount: {{ amount }}; Step: {{ step }}</div>
   </div>
 </template>
 
@@ -17,15 +19,31 @@ export default {
   components: { Card },
   data() {
     return {
-      Name: "Example",
-      Data: { a: 1, b: 2 },
-      Clickable: false,
-      Value: 0
+      name: "Example",
+      data: { a: 1, b: 2 },
+      clickable: false,
+      value: 0,
+      amount: 0,
+      step: 0,
+    }
+  },
+  computed: {
+    result() {
+      return {a: this.data.a + this.value,
+        b: this.data.b + this.value}
+    }
+  },
+  watch: {
+    value(val) {
+      this.amount += val
+    },
+    amount(newVal, oldVal) {
+      this.step = newVal - oldVal
     }
   },
   methods: {
     handler(value) {
-      this.Value = value
+      this.value = value
     }
   }
 };

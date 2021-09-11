@@ -1,11 +1,11 @@
 <template>
   <div>
     <div :title="'Jump to: ' + $router.getRoutes()[0].name"
-         :class="{example: true, clickable: true}"
+         :class="{example: Value < 5, clickable: Clickable}"
          :style="{'font-size': '25px'}"
-         @click="$router.push({ name: 'Home' })">{{ 'Example' }}</div>
+         @click="$router.push({ name: 'Home' })">{{ Name }}</div>
 
-    <card :title="'Title'" :value="5" :data="{ a: 1, b: 2 }"></card>
+    <card :title="'Title'" :value="Value" :data="Data"></card>
   </div>
 </template>
 
@@ -15,6 +15,14 @@ import Card from "../components/Card";
 export default {
   name: "Example",
   components: { Card },
+  data() {
+    return {
+      Name: "Example",
+      Data: { a: 1, b: 2 },
+      Clickable: false,
+      Value: 0
+    }
+  }
 };
 </script>
 

@@ -5,7 +5,7 @@
          :style="{'font-size': '25px'}"
          @click="$router.push({ name: 'Home' })">{{ Name }}</div>
 
-    <card :title="'Title'" :value="Value" :data="Data"></card>
+    <card :title="'Title'" :value="Value" :data="Data" @calc="handler"></card>
   </div>
 </template>
 
@@ -21,6 +21,11 @@ export default {
       Data: { a: 1, b: 2 },
       Clickable: false,
       Value: 0
+    }
+  },
+  methods: {
+    handler(value) {
+      this.Value = value
     }
   }
 };

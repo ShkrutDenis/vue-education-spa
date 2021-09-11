@@ -1,8 +1,9 @@
 <template>
-  <div>
+  <div class="container">
     <div>Title: {{ title }}</div>
     <div>Value: {{ value }}</div>
     <div>Data: {{ data }}</div>
+    <div class="button" @click="increment">Increase `Value`</div>
   </div>
 </template>
 
@@ -25,5 +26,31 @@ export default {
       type: Object,
     },
   },
+  methods: {
+    increment() {
+      this.$emit('calc', this.value + 1)
+    }
+  }
 };
 </script>
+
+<style scoped>
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 30px;
+  border: 1px solid green;
+  padding: 3px;
+  margin: 5px;
+  cursor: pointer;
+}
+</style>

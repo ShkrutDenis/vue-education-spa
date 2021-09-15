@@ -8,12 +8,26 @@
     <card :title="'Title'" :value="value" :data="data" @calc="handler"></card>
     <div>Result: {{ result }}</div>
     <div>Amount: {{ amount }}; Step: {{ step }}</div>
-    <div ref="test"></div>
+    <div v-if="loaded">
+      <div>POSTS</div>
+      <template v-if="errors.length">
+        <div v-for="(error, index) in errors" :key="index">
+          {{ error }}
+        </div>
+      </template>
+      <div v-for="post in posts" :key="post.id">
+        <div>Title: {{ post.title }}</div>
+        <div>ID: {{ post.id }}. User: {{ post.userId }}</div>
+        <div>Body: {{ post.body }}</div>
+      </div>
+    </div>
+    <div v-else>Loading....</div>
   </div>
 </template>
 
 <script>
 import Card from "../components/Card";
+import axios from "axios";
 
 export default {
   name: "Example",
@@ -26,6 +40,9 @@ export default {
       value: 0,
       amount: 0,
       step: 0,
+      posts: [],
+      loaded: false,
+      errors: []
     }
   },
   computed: {
@@ -47,11 +64,15 @@ export default {
       this.value = value
     }
   },
-  created() {
-    this.$refs.test.innerText = "TEST"
-  },
   mounted() {
-    this.$refs.test.innerText = "TEST2"
+    const url = 'https://jsonplaceholder.typicode.com/posts'
+    axios.get(url).then((res) => {
+      this.posts = res.data
+    }).catch((err) => {
+      this.errors.push(err)
+    }).finally(() => {
+      this.loaded = true
+    })
   }
 };
 </script>

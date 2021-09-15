@@ -8,6 +8,7 @@
     <card :title="'Title'" :value="value" :data="data" @calc="handler"></card>
     <div>Result: {{ result }}</div>
     <div>Amount: {{ amount }}; Step: {{ step }}</div>
+    <div ref="test"></div>
   </div>
 </template>
 
@@ -45,6 +46,12 @@ export default {
     handler(value) {
       this.value = value
     }
+  },
+  created() {
+    this.$refs.test.innerText = "TEST"
+  },
+  mounted() {
+    this.$refs.test.innerText = "TEST2"
   }
 };
 </script>

@@ -8,14 +8,14 @@
     <card :title="'Title'" :value="value" :data="data" @calc="handler"></card>
     <div>Result: {{ result }}</div>
     <div>Amount: {{ amount }}; Step: {{ step }}</div>
-    <div v-if="loaded">
-      <div>POSTS</div>
-      <template v-if="errors.length">
-        <div v-for="(error, index) in errors" :key="index">
+    <div v-if="postsLoaded">
+      <div>POSTS</div><div @click="fetchPosts">Reload</div>
+      <template v-if="getPostsErrors.length">
+        <div v-for="(error, index) in getPostsErrors" :key="index">
           {{ error }}
         </div>
       </template>
-      <div v-for="post in posts" :key="post.id">
+      <div v-for="post in getPosts" :key="post.id">
         <div>Title: {{ post.title }}</div>
         <div>ID: {{ post.id }}. User: {{ post.userId }}</div>
         <div>Body: {{ post.body }}</div>
@@ -27,7 +27,7 @@
 
 <script>
 import Card from "../components/Card";
-import axios from "axios";
+import { mapGetters, mapActions } from "vuex"
 
 export default {
   name: "Example",
@@ -40,16 +40,14 @@ export default {
       value: 0,
       amount: 0,
       step: 0,
-      posts: [],
-      loaded: false,
-      errors: []
     }
   },
   computed: {
     result() {
       return {a: this.data.a + this.value,
         b: this.data.b + this.value}
-    }
+    },
+    ...mapGetters('posts', ['getPosts', 'postsLoaded', 'getPostsErrors']),
   },
   watch: {
     value(val) {
@@ -62,17 +60,11 @@ export default {
   methods: {
     handler(value) {
       this.value = value
-    }
+    },
+    ...mapActions('posts', ['fetchPosts']),
   },
   mounted() {
-    const url = 'https://jsonplaceholder.typicode.com/posts'
-    axios.get(url).then((res) => {
-      this.posts = res.data
-    }).catch((err) => {
-      this.errors.push(err)
-    }).finally(() => {
-      this.loaded = true
-    })
+    this.fetchPosts()
   }
 };
 </script>
